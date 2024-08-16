@@ -22,10 +22,7 @@ export default function Page() {
           <strong>secure</strong>, <strong>private</strong>,{" "}
           <strong>ephemeral</strong> group messaging
         </p>
-        <nav>
-          <a href="https://github.com/killthebuddh4/shh">learn more</a>
-          <a href="https://github.com/killthebuddh4/shh">github</a>
-        </nav>
+        <a href="https://github.com/killthebuddh4/shh">learn more</a>
       </header>
       <div className="footer">
         <div className="instructions">
