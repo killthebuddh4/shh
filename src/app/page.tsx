@@ -1,17 +1,19 @@
 "use client";
 import { Wallet } from "@ethersproject/wallet";
 import { useState } from "react";
+import { Group } from "@/types/Group";
 
 export default function Page() {
   const [alias, setAlias] = useState<string | null>(null);
   const [wallet, setWallet] = useState<Wallet | null>(null);
   const [input, setInput] = useState("");
+  const [group, setGroup] = useState<Group | null>(null);
 
   let invite: string | null;
-  if (wallet === null) {
+  if (group === null) {
     invite = null;
   } else {
-    invite = `https://shh.ktb.pub/join/${wallet.address}`;
+    invite = `https://shh.ktb.pub/join/${group.owner.address}`;
   }
 
   return (
@@ -37,19 +39,22 @@ export default function Page() {
           {alias !== null && invite === null && (
             <p>
               <em>
-                hello <span className="alias">{alias}</span>. i'll create a
+                hello <span className="alias">{alias}</span>. i'm creating a
                 group now. one moment please...
               </em>
             </p>
           )}
-          {alias !== null && invite !== null && (
+          {alias !== null && group !== null && (
             <>
               <p>
                 <em>ok, the group is ready, you can start sending messages</em>
               </p>
-              <a className="invite" target="_blank" href={invite}>
-                invite
-              </a>
+
+              {invite !== null && (
+                <a className="invite" target="_blank" href={invite!}>
+                  invite
+                </a>
+              )}
             </>
           )}
         </div>
@@ -57,17 +62,25 @@ export default function Page() {
           className="input"
           autoFocus
           onChange={(e) => setInput(e.target.value)}
-          onKeyDown={(e) => {
-            if (alias === null) {
+          onKeyDown={async (e) => {
+            if (alias === null && group === null) {
               if (e.key === "Enter") {
                 setAlias(input);
-                setInput("");
-              }
-            }
 
-            if (alias !== null && wallet === null) {
-              if (e.key === "Enter") {
-                setWallet(Wallet.createRandom());
+                const wallet = Wallet.createRandom();
+
+                setWallet(wallet);
+
+                setGroup({
+                  owner: {
+                    alias: input,
+                    address: wallet.address,
+                  },
+                  members: [],
+                  messages: [],
+                });
+
+                setInput("");
               }
             }
           }}
