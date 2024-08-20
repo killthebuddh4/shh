@@ -2,6 +2,14 @@
 import { Wallet } from "@ethersproject/wallet";
 import { useState } from "react";
 import { Group } from "@/types/Group";
+import { useQuiver } from "@killthebuddha/fig";
+
+// const hello = createFunction({
+//   auth: async () => true,
+//   handler: async () => "hello",
+// });
+
+const x = Wallet.createRandom();
 
 export default function Page() {
   const [alias, setAlias] = useState<string | null>(null);
